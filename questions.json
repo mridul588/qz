@@ -1,0 +1,55 @@
+{
+    "questions": [
+      {
+        "question": "What is the output of the following JavaScript code?\n\nconsole.log(typeof NaN);",
+        "options": ["number", "NaN", "string", "undefined"],
+        "correctOption": 0
+      },
+      {
+        "question": "Which of the following is a valid way to declare a variable in JavaScript?",
+        "options": ["variable x = 10;", "var x = 10;", "let x = 10;", "const x = 10;"],
+        "correctOption": 1
+      },
+      {
+        "question": "What does the 'async' keyword do in JavaScript?",
+        "options": ["Indicates that a function returns a Promise", "Declares a function to be asynchronous", "Marks a block of code to run in parallel", "Specifies that a function should be executed in strict mode"],
+        "correctOption": 1
+      },
+      {
+        "question": "In Node.js, which module is used for file system operations?",
+        "options": ["http", "fs", "path", "util"],
+        "correctOption": 1
+      },
+      {
+        "question": "What does the 'require' function do in Node.js?",
+        "options": ["Imports a module", "Defines a new module", "Executes a function asynchronously", "Returns the current module"],
+        "correctOption": 0
+      },
+      {
+        "question": "What does the 'npm' command stand for?",
+        "options": ["Node Package Manager", "Node Project Manager", "New Project Manager", "NPM Package Manager"],
+        "correctOption": 0
+      },
+      {
+        "question": "Which event loop phase executes I/O callbacks in Node.js?",
+        "options": ["Poll phase", "Timers phase", "Check phase", "Close callbacks phase"],
+        "correctOption": 0
+      },
+      {
+        "question": "What is the purpose of the 'use strict' directive in JavaScript?",
+        "options": ["Enforces stricter syntax checking", "Enables strict mode", "Optimizes code for better performance", "Prevents certain actions from being taken"],
+        "correctOption": 1
+      },
+      {
+        "question": "What does the 'exports' object represent in a Node.js module?",
+        "options": ["The module's namespace", "The module's exports", "The module's properties", "The module's dependencies"],
+        "correctOption": 1
+      },
+      {
+        "question": "Which built-in method in JavaScript is used to split a string into an array of substrings?",
+        "options": ["slice()", "split()", "substring()", "splice()"],
+        "correctOption": 1
+      }
+    ]
+  }
+  

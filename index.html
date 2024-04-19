@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Node.js Quiz</h1>
+    <button id="startButton">Start Quiz</button>
+
+    <div id="quizContainer">
+        <form id="quizForm">
+            <!-- Quiz questions will be loaded dynamically here -->
+        </form>
+        <div id="navigation">
+            <button id="prevButton">Previous</button>
+            <button id="nextButton">Next</button>
+        </div>
+        <button id="submitButton" style="display: none;">Submit Quiz</button>
+    </div>
+
+    <div id="resultContainer" style="display: none;">
+        <h2>Quiz Result</h2>
+        <p>Your score: <span id="score"></span></p>
+        <ul id="feedbackList"></ul>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let quizData;
+        let userAnswers = [];
+
+        document.getElementById('startButton').addEventListener('click', () => {
+            fetchQuizData();
+        });
+
+        document.getElementById('prevButton').addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showQuestion(currentIndex);
+            }
+        });
+
+        document.getElementById('nextButton').addEventListener('click', () => {
+            const selectedOption = document.querySelector(`input[name="q${currentIndex}"]:checked`);
+            if (selectedOption) {
+                userAnswers[currentIndex] = selectedOption.value;
+                currentIndex++;
+                showQuestion(currentIndex);
+            } else {
+                alert("Please select an option before proceeding.");
+            }
+        });
+
+        document.getElementById('submitButton').addEventListener('click', () => {
+            submitQuiz();
+        });
+
+        function fetchQuizData() {
+            fetch('http://localhost:3000/api/quiz')
+                .then(response => response.json())
+                .then(data => {
+                    quizData = data;
+                    showQuestion(currentIndex);
+                    document.getElementById('startButton').style.display = 'none';
+                    document.getElementById('quizContainer').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching quiz data:', error);
+                });
+        }
+
+        function showQuestion(index) {
+            const question = quizData.questions[index];
+            const quizForm = document.getElementById('quizForm');
+            quizForm.innerHTML = `
+                <div>
+                    <h3>${question.question}</h3>
+                    ${question.options.map((option, optionIndex) => `
+                        <div class='quiz'>
+                        <input type="radio" id="q${index}_option${optionIndex}" name="q${index}" value="${optionIndex}">
+                        <label for="q${index}_option${optionIndex}">${option}</label><br>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            document.getElementById('prevButton').style.display = index === 0 ? 'none' : 'inline-block';
+            document.getElementById('nextButton').style.display = index === quizData.questions.length - 1 ? 'none' : 'inline-block';
+            document.getElementById('submitButton').style.display = index === quizData.questions.length - 1 ? 'inline-block' : 'none';
+        }
+
+        function submitQuiz() {
+            fetch('http://localhost:3000/api/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ answers: userAnswers })
+            })
+            .then(response => response.json())
+            .then(({ score, feedback }) => {
+                document.getElementById('score').textContent = score;
+                const feedbackList = document.getElementById('feedbackList');
+                feedbackList.innerHTML = '';
+
+                feedback.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${item.question} - Your answer: ${item.userAnswer}, Result: ${item.result}`;
+                    if (item.result === 'incorrect') {
+                        listItem.textContent += `, Correct answer: ${item.correctAnswer}`;
+                    }
+                    feedbackList.appendChild(listItem);
+                });
+
+                document.getElementById('resultContainer').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error submitting quiz:', error);
+            });
+        }
+    </script>
+</body>
+</html>
